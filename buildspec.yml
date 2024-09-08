@@ -2,15 +2,16 @@ version: 0.2
 
 phases:
   pre_build:
-    commands:
-      - echo Logging in to Amazon ECR....
-      - aws --version
-      # Use the Windows-compatible PowerShell command to get ECR login details
-      - echo $(aws ecr get-login-password --region ap-south-1) | docker login --username AWS --password-stdin 011528285140.dkr.ecr.ap-south-1.amazonaws.com
-      - echo Setting repository URI
-      - set REPOSITORY_URI=011528285140.dkr.ecr.ap-south-1.amazonaws.com/spring-demo-ecr
-      - echo Setting image tag
-      - set IMAGE_TAG=build-%CODEBUILD_BUILD_ID:~12%
+  commands:
+    - echo Logging in to Amazon ECR....
+    - aws --version
+    # Use the Windows-compatible command to get ECR login details
+    - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 011528285140.dkr.ecr.ap-south-1.amazonaws.com
+    - echo Setting repository URI
+    - set REPOSITORY_URI=011528285140.dkr.ecr.ap-south-1.amazonaws.com/spring-demo-ecr
+    - echo Setting image tag
+    # Use Windows-compatible syntax to extract part of CODEBUILD_BUILD_ID
+    - set IMAGE_TAG=build-%CODEBUILD_BUILD_ID%
   build:
     commands:
       - echo Build started on %date%
